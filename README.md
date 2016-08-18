@@ -10,3 +10,10 @@
 
 #Technologies
 Apache Spark, Python, Flask, Angular
+
+#WorkFlow
+![alt tag](https://github.com/sarikakale/Yelp-Recommendation-Engine/master/Workflow.png)
+
+#Future Scope:
+
+This project is a very simple implementation of recommendation system. It can be further enhanced with more features like more preference choices, recommendation taking into consideration user’s location, review analysis for positivity and negativity, analysis on a business’s expansion possibility, competitions around and predicting business growth. Recommendation engines provide a great deal of information for business growth and is a very profitable solution for many organizations. More efficient algorithms can be explored for accurate predictions.
