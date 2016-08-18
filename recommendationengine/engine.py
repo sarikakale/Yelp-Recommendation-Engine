@@ -99,7 +99,7 @@ class RecommendationEngine:
         #Add user Names and business names and addresses along with predicted ratings
         user_names = self.user_ids.map(lambda x:(x[0],x[1][0]))
         business_names = self.business_ids.map(lambda x:(x[0],(x[1][0],x[1][1])))
-        predict_ratings_string=predict_ratings_string.map(lambda x: (x[0],(x[1],x[2]))).join(user_names).keyBy(lambda x:x[1][0][0]).join(business_names).map(lambda x:(x[1][0][0],x[0],x[1][0][1][0][1],x[1][0][1][1],x[1][1][0],x[1][1][1]))     
+        predict_ratings_string=predict_ratings_string.map(lambda x: (x[0],(x[1],x[2]))).join(user_names).keyBy(lambda x:x[1][0][0]).join(business_names).map(lambda x:(x[1][0][0],x[0],x[1][0][1][0][1],x[1][0][1][1],x[1][1][0],x[1][1][1])).cache()     
         print(predict_ratings_string.take(10))
         return predict_ratings_string
             
