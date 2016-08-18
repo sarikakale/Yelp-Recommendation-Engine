@@ -1,0 +1,312 @@
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+
+<body class="container" ng-app="recommendation">
+    <form ng-controller="recommendationSystem">
+        <h1> Enter Info </h1>
+        
+        <div class="row form-group">
+            <input type="text" list="users" id="userId" class="form-control" placeholder="User Id" ng-model="userId" />
+        </div>
+        
+        <div class="row form-group">
+            <input type="number" id="count" class="form-control" placeholder="Enter Count" ng-model="count" />
+            <button ng-click="getTopRecommendation()" class="btn btn-primary">Top Recommendations</button>
+        </div>
+        <div class="row form-group">
+            <input list="address" placeholder="Address" class="form-control" ng-model="address" />
+            <button ng-click="goToNearest()" class="btn btn-primary"> Get Nearest Business </button>
+        </div>
+
+        <div class="row form-group">
+            <input list="business" placeholder="Business Id" class="form-control" ng-model="business" />
+            <button ng-click="goToBusiness()" class="btn btn-primary"> Get Ratings for Business </button>
+        </div>
+
+        <div class="row form-group">
+            <input list="state" placeholder="State" class="form-control" ng-model="state" />
+            <datalist id="state">
+                <option value="AL">AL</option>
+                <option value="AK">AK</option>
+                <option value="AZ">AZ</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">CA</option>
+                <option value="CO">CO</option>
+                <option value="CT">CT</option>
+                <option value="DE">DE</option>
+                <option value="DC">DC</option>
+                <option value="FL">FL</option>
+                <option value="GA">GA</option>
+                <option value="HI">HI</option>
+                <option value="ID">ID</option>
+                <option value="IL">IL</option>
+                <option value="IN">IN</option>
+                <option value="IA">IA</option>
+                <option value="KS">KS</option>
+                <option value="KY">KY</option>
+                <option value="LA">LA</option>
+                <option value="ME">ME</option>
+                <option value="MD">MD</option>
+                <option value="MA">MA</option>
+                <option value="MI">MI</option>
+                <option value="MN">MN</option>
+                <option value="MS">MS</option>
+                <option value="MO">MO</option>
+                <option value="MT">MT</option>
+                <option value="NE">NE</option>
+                <option value="NV">NV</option>
+                <option value="NH">NH</option>
+                <option value="NJ">NJ</option>
+                <option value="NM">NM</option>
+                <option value="NY">NY</option>
+                <option value="NC">NC</option>
+                <option value="ND">ND</option>
+                <option value="OH">OH</option>
+                <option value="OK">OK</option>
+                <option value="OR">OR</option>
+                <option value="PA">PA</option>
+                <option value="RI">RI</option>
+                <option value="SC">SC</option>
+                <option value="SD">SD</option>
+                <option value="TN">TN</option>
+                <option value="TX">TX</option>
+                <option value="UT">UT</option>
+                <option value="VT">VT</option>
+                <option value="VA">VA</option>
+                <option value="WA">WA</option>
+                <option value="WV">WV</option>
+                <option value="WI">WI</option>
+                <option value="WY">WY</option>
+            </datalist>
+            <button ng-click="goToStates()" class="btn btn-primary"> Get Business By State </button>
+        </div>
+        <div class="row form-group">
+            <input list="city" placeholder="City" class="form-control" ng-model="city" />
+            <datalist id="city">
+            </datalist>
+            <button ng-click="goToCity()" class="btn btn-primary"> Get Business By City </button>
+        </div>
+        <div class="row form-group">
+            <input list="categories" placeholder="Category" class="form-control" ng-model="category" />
+            <datalist id="categories">
+            </datalist>
+            <button ng-click="goToCategory()" class="btn btn-primary"> Get Business By Category </button>
+        </div>
+        <h2>Results</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>UserId</th>
+                <th>BusinessID</th>
+                <th>Ratings </th>
+                <th>UserName</th>
+                <th>BusinessName</th>
+                <th>Address</th>
+                <th>Categories</th>
+            </tr>
+            <tr ng-repeat="result in results">
+                <td ng-repeat="value in result" class="row">
+                    //value//
+                </td>
+            </tr>
+        </table>
+        //errorMessage//
+    </form>
+</body>
+<script type="text/javascript">
+var app = angular.module('recommendation', [])
+app.controller('recommendationSystem', function($scope, $http, $location, $window) {
+        var count = 100
+        var host = "0.0.0.0"
+        var port = 5432
+
+        $scope.rs = "HHIII"
+
+        $scope.goToBusiness = function(){
+
+        	if ($scope.userId == null || $scope.business == null) {
+                $scope.errorMessage = "Please Fill the UserId/BusinessId";
+                return false;
+            }
+
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/ratings/" + $scope.business
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+
+            }).error(function(error) {
+                console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+
+        }
+        $scope.getTopRecommendation = function() {
+            if ($scope.userId == null || $scope.count == null) {
+                $scope.errorMessage = "Please Fill the UserId/Count";
+                return false;
+            }
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/ratings/top/" + $scope.count
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+
+            }).error(function(error) {
+                console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+
+        }
+        $scope.goToNearest = function() {
+            var address = $scope.address
+            if ($scope.userId == null || $scope.count == null || $scope.address == null) {
+                $scope.errorMessage = "Please Fill the UserId/Count/Address";
+                return false;
+            }
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/nearest/" + count + "/" + address
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+
+            }).error(function(error) {
+                console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+        }
+
+
+
+        $scope.goToStates = function() {
+            var state = $scope.state
+            if ($scope.userId == null || $scope.count == null || state == null) {
+                $scope.errorMessage = "Please Fill the UserId/Count/State";
+                return false;
+            }
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/state/" + count + "/" + state
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                //var rslt = JSON.stringify(data)
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+                    //if (data.login == "Success")
+                    // $location.path('/home');
+
+            }).error(function(error) {
+                console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+        }
+
+
+        $scope.goToCity = function() {
+            var city = $scope.city
+            if ($scope.userId == null || $scope.count == null || city == null) {
+                $scope.errorMessage = "Please Fill the UserId/Count/City";
+                return false;
+            }
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/city/" + count + "/" + city
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+
+            }).error(function(error) {
+                console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+        }
+
+        $scope.goToCategory = function() {
+            var category = $scope.category
+            if ($scope.userId == null || $scope.count == null || category == null) {
+                $scope.errorMessage = "Please Fill the UserId/Count/Category";
+                return false;
+            }
+            var url = "http://" + host + ":" + port + "/" + $scope.userId + "/category/" + count + "/" + category
+            $http({
+                method: "GET",
+                url: url
+            }).success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    for (var j = 0; j < data[i].length; j++) {
+                        console.log(data[i][j])
+                    }
+                }
+                $scope.results = data
+                alert($scope.results)
+
+                return $scope.results
+
+            }).error(function(error) {
+            	console.log("Error");
+                $scope.unexpected_error = true;
+                $scope.invalid_login = false;
+            });
+
+        }
+
+    })
+    .config(function($interpolateProvider) {
+        $interpolateProvider.startSymbol('//').endSymbol('//');
+    });
+</script>
+
+</html>
