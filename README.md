@@ -11,6 +11,17 @@
 #Technologies
 Apache Spark, Python, Flask, Angular
 
+#The basic flow of data is:
+
+Initially, Yelp data is fed to Apache Spark and important details are extracted from the dataset.
+Once the data set is extracted, the String Ids of users and businesses are converted to int Ids as the machine library of Spark can only take input (user,product,ratings) in the form (int, int, float).
+Now we provide the userIds, business Ids and stars in the yelp_reviews for training.
+Spark’s mlib for recommendation is really efficient and faster. It uses Model based Collaborative Filtering with alternating least squares (ALS) algorithm to learn the latent factors.
+I tried User Based Collaborative Filtering and Trust Based Recommendations on the same dataset, but it consumed large amount of memory, were comparatively slower and not efficient. Basically my system crashed due to processing of such a huge dataset. Hence I decided to go with the Spark’s mlib for Recommendations.
+After training data, it was easy to predict business for a userId. The int Ids had to be converted back to String Ids for extractings details of business.
+Now, in my system, user is provided with top recommendations near the address he mentions, within city and state he provides and also the category of business he wants. This can be further modified with user’s current location which has not been implemented.
+An interactive UI ensures that user easily provides input and clearly sees the results.
+
 #WorkFlow
 ![alt tag](https://github.com/sarikakale/Yelp-Recommendation-Engine/blob/master/WorkFlow.png)
 
