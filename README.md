@@ -9,4 +9,4 @@
 8. Provided an interactive UI for users to input preferences and a neat display of business recommendations.
 
 #Technologies
-Apache Spark, Python, Flask, 8.Angular
+Apache Spark, Python, Flask, Angular
