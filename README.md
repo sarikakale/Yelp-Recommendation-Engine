@@ -12,7 +12,7 @@
 Apache Spark, Python, Flask, Angular
 
 #WorkFlow
-![alt tag](https://github.com/sarikakale/Yelp-Recommendation-Engine/master/Workflow.png)
+![alt tag](https://github.com/sarikakale/Yelp-Recommendation-Engine/blob/master/WorkFlow.png)
 
 #Future Scope:
 
